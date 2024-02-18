@@ -4,20 +4,20 @@ const initialCards = [
       link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
     },
     {
-      name: "Челябинская область",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
+      name: "Эльбрус",
+      link: "https://images.unsplash.com/photo-1518277232585-44d47773da22?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZWxicnVzfGVufDB8fDB8fHww",
     },
     {
-      name: "Иваново",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
+      name: "Сахалин",
+      link: "https://images.unsplash.com/photo-1661680391573-fe1853f6a41c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c2FraGFsaW58ZW58MHx8MHx8fDA%3D",
     },
     {
       name: "Камчатка",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
+      link: "https://images.unsplash.com/photo-1604762093467-ac22c30cc60e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z29yZWx5fGVufDB8fDB8fHww",
     },
     {
-      name: "Холмогорский район",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
+      name: "Карелия",
+      link: "https://images.unsplash.com/photo-1607516101314-7a88bacd9d43?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8a2FyZWxpYXxlbnwwfHwwfHx8MA%3D%3D",
     },
     {
       name: "Байкал",
