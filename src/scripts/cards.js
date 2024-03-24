@@ -1,7 +1,7 @@
 export const initialCards = [
     {
-      name: "Архыз",
-      link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
+      name: "Дагестан",
+      link: "https://images.unsplash.com/photo-1617573543793-1b13d0a3f75c?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fCVEMSU4MCVEMCVCNSVEMSU4MSVEMCVCRiVEMSU4MyVEMCVCMSVEMCVCQiVEMCVCOCVEMCVCQSVEMCVCMCUyMCVEMCVCNCVEMCVCMCVEMCVCMyVEMCVCNSVEMSU4MSVEMSU4MiVEMCVCMCVEMCVCRHxlbnwwfHwwfHx8MA%3D%3D",
     },
     {
       name: "Эльбрус",
