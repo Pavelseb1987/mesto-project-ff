@@ -2,7 +2,7 @@
 const cardTemplate = document.querySelector('#card-template').content;
 const placesItemTemplate = cardTemplate.querySelector('.places__item');
 
-
+// ФУНКЦИЯ СОЗДАНИЯ КАРТОЧКИ
 export function createCard(cardImageLink, cardTitleText, removeCard, likeCardToggler, openPopupImage) { 
     const placesItem = placesItemTemplate.cloneNode(true);
     const cardDeleteButton = placesItem.querySelector('.card__delete-button');
@@ -22,4 +22,14 @@ export function createCard(cardImageLink, cardTitleText, removeCard, likeCardTog
     
   }
 
+  // КАРТОЧКИ - ОБРАБОТЧИКИ УДАЛЕНИЯ И ЛАЙКА
+export function removeCard(evt) {                                                           // функция удаления карточки
+    const DelPlace = evt.target.closest('.places__item');
+    DelPlace.remove();
+};
+
+export function likeCardToggler (evt) {                                                     // функция лайка карточек 
+    console.log(evt);    
+    evt.target.classList.toggle('card__like-button_is-active'); 
+};
 

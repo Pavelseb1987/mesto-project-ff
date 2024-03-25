@@ -3,6 +3,8 @@ import {initialCards} from './scripts/cards.js';
 import {createCard} from './components/card.js';
 import {openModal} from './components/modal.js';
 import {closeModal} from './components/modal.js';
+import {removeCard} from './components/card.js';
+import {likeCardToggler} from './components/card.js';
 
 // ПЕРЕМЕННЫЕ
 const placesList = document.querySelector('.places__list');                          // список карточек
@@ -29,17 +31,7 @@ const profileName = document.querySelector('.profile__title');                  
 const profileJob = document.querySelector('.profile__description');                  // профиль - работа
 
 
-// КАРТОЧКИ - УДАЛЕНИЕ, ЛАЙК И ОТРИСОВКА ДЕФОЛТНЫХ КАРТОЧЕК ПРИ ОБНОВЛЕНИИ
-function removeCard(evt) {                                                           // функция удаления карточки
-    const DelPlace = evt.target.closest('.places__item');
-    DelPlace.remove();
-};
-
-function likeCardToggler (evt) {                                                     // функция лайка карточек 
-    console.log(evt);    
-    evt.target.classList.toggle('card__like-button_is-active'); 
-};
-
+// ОТРИСОВКА ДЕФОЛТНЫХ КАРТОЧЕК ПРИ ОБНОВЛЕНИИ
 initialCards.forEach(function (item) {                                               // добавления дефолтных карточкек при загрузке
     placesList.append(createCard(item.link, item.name, removeCard, likeCardToggler, openPopupImage));
 })
