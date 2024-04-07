@@ -1,4 +1,5 @@
 .profile__image {
+  position: relative;
   width: 120px;
   height: 120px;
   -webkit-border-radius: 50%;
@@ -19,4 +20,39 @@
   .profile__image {
     margin-right: 0;
   }
+}
+
+.profile__image:hover {
+  cursor: pointer;
+}
+
+.profile__image:hover .edit_avatar{
+  opacity: 1;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.edit_avatar {
+  position: absolute;
+  background-color: rgba(0,0,0, 0.7);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+}
+
+.icon_edit-avatar {
+  position: absolute;
+  background-image: url('../../../images/edit-icon.svg');
+  background-position: center;
+  background-size: 20%;
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
 }
