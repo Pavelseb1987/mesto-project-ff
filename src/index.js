@@ -2,9 +2,9 @@ import './pages/index.css';
 import {createCard} from './components/card.js';
 import {openModal} from './components/modal.js';
 import {closeModal} from './components/modal.js';
-import {enableValidation} from './components/validation.js';
+import {enableValidation, clearValidation} from './components/validation.js';
 import {getInitialCards, getProfileInfo, addOneCard, editMyProfile, changeAvatar} from './components/api.js'
-
+import {validSet} from './components/validation.js';
 
 // ПЕРЕМЕННЫЕ
 const placesList = document.querySelector('.places__list');                          // список карточек
@@ -35,6 +35,10 @@ const profileJob = document.querySelector('.profile__description');             
 
 const profileImage = document.querySelector('.profile__image');
 
+const inputProfileForm = document.querySelector('.popup_type_edit .popup__form[name="edit-profile"]');
+const inputAvatarForm = document.querySelector('.popup_type_update-avatar .popup__form[name="new-avatar"]');
+const inputNewCardForm = document.querySelector('.popup_type_new-card .popup__form[name="new-place"]');
+
 
 
 function openPopupImage(cardSrc, cardName) {                                         // функция открытия попапа картинки                                             
@@ -50,21 +54,25 @@ profilePopup.addEventListener('submit', editProfile);                           
 profileEditButton.addEventListener('click', function(event) {                         // слушатель открытия попапа профиля 
     openModal(profilePopup);
     nameInput.value = profileName.textContent;
-    jobInput.value = profileJob.textContent; 
+    jobInput.value = profileJob.textContent;
+    clearValidation(inputProfileForm, validSet)
   });
 
 placePopup.addEventListener('submit', createNewCard);                                 // слушатель сабмита новой карточки
 
 cardAddButton.addEventListener('click', function(event) {                             // слушатель открытия попапа добавления карточек 
     openModal(placePopup);
+    clearValidation(inputNewCardForm, validSet);
+    popupCardForm.reset();
   });
 
 avatarEditButton.addEventListener('click', function(event) {                          // слушатель открытия попапа аватара
+    clearValidation(inputAvatarForm, validSet);
+    inputAvatarForm.reset();
     openModal(avatarPopup);
   });
 
 avatarPopup.addEventListener('submit', editAvatarProfile);                            // слушатель сабмита аватара
-
 
 popupList.forEach(function (popupItem) {                                              // работа кнопок закрытия попапов
     const popupCloseButton = popupItem.querySelector('.popup__close');                // крестики модальных окон
@@ -73,17 +81,8 @@ popupList.forEach(function (popupItem) {                                        
     });;
 })
   
-enableValidation({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-  });  
-
-  
-// clearValidation(profileForm, validationConfig);                                           
+enableValidation(validSet);  
+                                         
 
 function loadingSubmit(evt, text) {                                                       // функция отображения загрузки
     const btn = evt.target.querySelector('.popup__button')
@@ -93,17 +92,23 @@ function loadingSubmit(evt, text) {                                             
 function showUserInfo(userData) {                                                         // функция показа информации о пользователе
     profileName.textContent = userData.name;
     profileJob.textContent = userData.about;
-    profileImage.style.backgroundImage = `url('${userData.avatar}')`;
 }
 
+function showAvatar(userData) {                                                         // функция показа информации о пользователе
+  profileImage.style.backgroundImage = `url('${userData.avatar}')`;
+}
+
+let userId
+
 getProfileInfo()                                                                          // получение информации о профиле
-    .then ((res) => {
-        console.log(res);
+    .then ((userData) => {
+        console.log(userData);
+        userId = userData._id;
+        return userId
       })
       .catch((err) => {
         console.log(err);
       }); 
-
 
 function editProfile(evt) {                                                               // функция редактирования данных профиля
         evt.preventDefault();
@@ -111,13 +116,14 @@ function editProfile(evt) {                                                     
         editMyProfile(`${nameInput.value}`, `${jobInput.value}`, evt)
           .then((res) => {
             showUserInfo(res, evt);
-          })
-          .then(() => {
             closeModal(profilePopup);
             popupCardForm.reset();
           })
           .catch((res) => {
             console.log(`Ошибка: ${res.status}`)
+          })
+          .finally(() => {
+            loadingSubmit(evt, 'Сохранить')
           })
       }
 
@@ -125,16 +131,19 @@ function editProfile(evt) {                                                     
 function createNewCard(evt) {                                                             // функция добавления новой карточки
         evt.preventDefault();
         loadingSubmit(evt, 'Сохранение...');
-        Promise.all([addOneCard(cardNameInput.value, cardUrlInput.value), getProfileInfo()])
-        .then(([card, userData]) => {
+        addOneCard(cardNameInput.value, cardUrlInput.value)
+        .then((card) => {
             console.log(placesList);
-            placesList.prepend(createCard(card, userData, openPopupImage));
-            placePopup.reset;
+            placesList.prepend(createCard(card, userId, openPopupImage));
+            closeModal(placePopup);
+            inputNewCardForm.reset();
           })
           .catch((res) => {
             console.log(`Ошибка: ${res.status}`)
           })
-        closeModal(placePopup);
+          .finally(() => {
+            loadingSubmit(evt, 'Сохранить')
+            })
       }
 
 function editAvatarProfile(evt) {                                                          // функция редактирования аватара профиля
@@ -142,23 +151,25 @@ function editAvatarProfile(evt) {                                               
         loadingSubmit(evt, 'Сохранение...')
         changeAvatar(avatarUrlInput.value)
           .then((res) => {
-            showUserInfo(res);
-            avatarPopup.reset;
+            showAvatar(res);
+            closeModal(avatarPopup);
+            inputAvatarForm.reset();
           })
-          
         .catch((res) => {
             console.log(`Ошибка: ${res.status}`)
           })
-
-          closeModal(avatarPopup);
+        .finally(() => {
+            loadingSubmit(evt, 'Сохранить')
+          })
       }
 
 Promise.all([getInitialCards(), getProfileInfo()])
     .then(([cardsData, userData]) => {
         console.log({cardsData, userData})
         showUserInfo(userData)
+        showAvatar(userData)
         cardsData.forEach(function (card) {                                                 // отрисовка всех карточек
-            placesList.append(createCard(card, userData, openPopupImage));
+            placesList.append(createCard(card, userId, openPopupImage));
         })
     })
     .catch((err) => {
