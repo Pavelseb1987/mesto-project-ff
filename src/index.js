@@ -4,7 +4,6 @@ import {openModal} from './components/modal.js';
 import {closeModal} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
 import {getInitialCards, getProfileInfo, addOneCard, editMyProfile, changeAvatar} from './components/api.js'
-import {validSet} from './components/validation.js';
 
 // ПЕРЕМЕННЫЕ
 const placesList = document.querySelector('.places__list');                          // список карточек
@@ -39,7 +38,14 @@ const inputProfileForm = document.querySelector('.popup_type_edit .popup__form[n
 const inputAvatarForm = document.querySelector('.popup_type_update-avatar .popup__form[name="new-avatar"]');
 const inputNewCardForm = document.querySelector('.popup_type_new-card .popup__form[name="new-place"]');
 
-
+export const validSet = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
 
 function openPopupImage(cardSrc, cardName) {                                         // функция открытия попапа картинки                                             
     openModal(imagePopup);
@@ -62,14 +68,14 @@ placePopup.addEventListener('submit', createNewCard);                           
 
 cardAddButton.addEventListener('click', function(event) {                             // слушатель открытия попапа добавления карточек 
     openModal(placePopup);
-    clearValidation(inputNewCardForm, validSet);
     popupCardForm.reset();
+    clearValidation(inputNewCardForm, validSet);
   });
 
 avatarEditButton.addEventListener('click', function(event) {                          // слушатель открытия попапа аватара
-    clearValidation(inputAvatarForm, validSet);
-    inputAvatarForm.reset();
     openModal(avatarPopup);
+    inputAvatarForm.reset();
+    clearValidation(inputAvatarForm, validSet);
   });
 
 avatarPopup.addEventListener('submit', editAvatarProfile);                            // слушатель сабмита аватара
@@ -99,16 +105,6 @@ function showAvatar(userData) {                                                 
 }
 
 let userId
-
-getProfileInfo()                                                                          // получение информации о профиле
-    .then ((userData) => {
-        console.log(userData);
-        userId = userData._id;
-        return userId
-      })
-      .catch((err) => {
-        console.log(err);
-      }); 
 
 function editProfile(evt) {                                                               // функция редактирования данных профиля
         evt.preventDefault();
@@ -166,6 +162,7 @@ function editAvatarProfile(evt) {                                               
 Promise.all([getInitialCards(), getProfileInfo()])
     .then(([cardsData, userData]) => {
         console.log({cardsData, userData})
+        userId = userData._id;
         showUserInfo(userData)
         showAvatar(userData)
         cardsData.forEach(function (card) {                                                 // отрисовка всех карточек
