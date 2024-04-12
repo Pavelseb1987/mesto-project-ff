@@ -7,20 +7,20 @@ const showInputError = (formElement, inputElement, errorMessage, validSet) => { 
   errorElement.textContent = errorMessage;
 };
 
-const hideInputError = (formElement, inputElement, validSet) => {                                       // скрыть ошибку ввода
+const hideInputError = (formElement, inputElement, validSet) => {                                     // скрыть ошибку ввода
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove(`${validSet.inputErrorClass}`);
-  errorElement.classList.remove(`${validSet.errorClass}`);
-  errorElement.textContent = '';
+  inputElement.classList.remove(validSet.inputErrorClass);
+  errorElement.classList.remove(validSet.errorClass);
+  errorElement.textContent = "";
 };
 
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
-  return !inputElement.validity.valid;
+  return !inputElement.validity.valid
   })
 }; 
 
-const checkInputValidity = (formElement, inputElement, validSet) => {                                             // проверка валидности ввода
+const checkInputValidity = (formElement, inputElement, validSet) => {                                 // проверка валидности ввода
   if (inputElement.validity.patternMismatch) {
   inputElement.setCustomValidity(inputElement.dataset.errorMessage);
 } 
@@ -41,13 +41,17 @@ const checkInputValidity = (formElement, inputElement, validSet) => {           
 }
 };
 
+function disableButton(buttonElement) {
+  buttonElement.classList.add(validSet.inactiveButtonClass);
+  buttonElement.disabled = true;
+}
+
 const toggleButtonState = (inputList, buttonElement, validSet) => {                                   // отключение сабмита при невалидном инпуте
   if (hasInvalidInput(inputList)) {
-      buttonElement.disabled = true;
-      buttonElement.classList.add(`${validSet.inactiveButtonClass}`);
+    disableButton(buttonElement);
   } else {
-      buttonElement.disabled = false;
       buttonElement.classList.remove(`${validSet.inactiveButtonClass}`);
+      buttonElement.disabled = false;
   }
 }; 
 
@@ -74,16 +78,17 @@ export const enableValidation = (validSet) => {                                 
 });
   };
 
-  export function clearValidation(formElement, validSet) {                                                 // сброс ошибок валидации
-    const inputs = formElement.querySelectorAll(validSet.inputSelector);
+  export function clearValidation(formElement, validSet) {                                            // сброс ошибок и отключение кнопки
+    const inputList = formElement.querySelectorAll(`${validSet.inputSelector}`);
     const buttonElement = formElement.querySelector(`${validSet.submitButtonSelector}`);
-    buttonElement.classList.add(validSet.inactiveButtonClass);
-    buttonElement.disabled = true;
+    
+    disableButton(buttonElement);                                                                    // отключаем кнопку
   
-    inputs.forEach((inputElement) => {
-      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-      inputElement.classList.remove(validSet.inputErrorClass);
-      errorElement.classList.remove(validSet.errorClass);
-      errorElement.textContent = "";
+    inputList.forEach((inputElement) => {                                                           // отключаем сообщения об ошибках
+      hideInputError (formElement, inputElement, validSet);
     });
+    
+    
   }
+  
+  
